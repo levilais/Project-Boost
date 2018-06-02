@@ -66,6 +66,7 @@ public class Rocket : MonoBehaviour {
     {
         audioSource.Stop();
         audioSource.PlayOneShot(deathSound);
+        deathParticles.Play();
         Invoke("LoadFirstLevel", 1f); // paramterise time
         state = State.Dying;
     }
