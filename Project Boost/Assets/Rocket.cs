@@ -5,9 +5,13 @@ public class Rocket : MonoBehaviour {
 
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
-    [SerializeField] AudioClip mainEngine;
+    [SerializeField] AudioClip mainEngineSound;
     [SerializeField] AudioClip deathSound;
-    [SerializeField] AudioClip loadSound;
+    [SerializeField] AudioClip successSound;
+
+    [SerializeField] ParticleSystem mainEngineParticles;
+    [SerializeField] ParticleSystem deathParticles;
+    [SerializeField] ParticleSystem successParticles;
 
     AudioSource audioSource;
     Rigidbody rigidBody;
@@ -16,14 +20,15 @@ public class Rocket : MonoBehaviour {
     State state = State.Alive;
 
 	// Use this for initialization
-    void Start () {
+    void Start () 
+    {
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        // todo somehwhere stop sound on death
+	void Update () 
+    {
         if (state == State.Alive)
         {
             RespondToThrustInput();
@@ -51,7 +56,8 @@ public class Rocket : MonoBehaviour {
 
     private void StartSuccessSequence()
     {
-        audioSource.PlayOneShot(loadSound);
+        audioSource.PlayOneShot(successSound);
+        successParticles.Play();
         Invoke("LoadNextScene", 1f); // paramterise time
         state = State.Transcending;
     }
@@ -84,6 +90,7 @@ public class Rocket : MonoBehaviour {
         else 
         {
             audioSource.Stop();
+            mainEngineParticles.Stop();
         }
     }
 
@@ -93,8 +100,9 @@ public class Rocket : MonoBehaviour {
 
         if (!audioSource.isPlaying)
         {
-            audioSource.PlayOneShot(mainEngine);
+            audioSource.PlayOneShot(mainEngineSound);
         }
+        mainEngineParticles.Play();
     }
 
     private void RespondToRotateInput()
