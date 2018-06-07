@@ -5,6 +5,8 @@ public class Rocket : MonoBehaviour {
 
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+    [SerializeField] float levelLoadDelay = 2f;
+
     [SerializeField] AudioClip mainEngineSound;
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip successSound;
@@ -58,7 +60,7 @@ public class Rocket : MonoBehaviour {
     {
         audioSource.PlayOneShot(successSound);
         successParticles.Play();
-        Invoke("LoadNextScene", 1f); // paramterise time
+        Invoke("LoadNextScene", levelLoadDelay);
         state = State.Transcending;
     }
 
@@ -67,7 +69,7 @@ public class Rocket : MonoBehaviour {
         audioSource.Stop();
         audioSource.PlayOneShot(deathSound);
         deathParticles.Play();
-        Invoke("LoadFirstLevel", 1f); // paramterise time
+        Invoke("LoadFirstLevel", levelLoadDelay);
         state = State.Dying;
     }
 
